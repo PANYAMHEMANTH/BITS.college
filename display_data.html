@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <h2>User Dashboard</h2>
+    <ul id="userList"></ul>
+    <button id="logoutButton">Logout</button>
+
+    <script>
+        const userList = document.getElementById('userList');
+        const logoutButton = document.getElementById('logoutButton');
+        const storedData = localStorage.getItem('signupData');
+        let signupData = storedData ? JSON.parse(storedData) : [];
+
+        function updateUserList() {
+            userList.innerHTML = ''; // Clear the list
+            signupData.forEach((user, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `Username: ${user.username}, Email: ${user.email}, Password: ${user.password}, Status: ${user.status}`;
+                
+                // Create an "Enable" or "Disable" button for each entry
+                const toggleButton = document.createElement('button');
+                toggleButton.textContent = user.status === 'Enabled' ? 'Disable' : 'Enable';
+                
+                // Add a click event listener to toggle the status of the corresponding user
+                toggleButton.addEventListener('click', () => {
+                    signupData[index].status = user.status === 'Enabled' ? 'Disabled' : 'Enabled'; // Toggle the status
+                    localStorage.setItem('signupData', JSON.stringify(signupData)); // Update localStorage
+                    updateUserList(); // Refresh the user list
+                });
+
+                // Create a "Clear" button for each entry
+                const clearButton = document.createElement('button');
+                clearButton.textContent = 'Clear';
+                
+                // Add a click event listener to remove the corresponding user entry
+                clearButton.addEventListener('click', () => {
+                    signupData.splice(index, 1); // Remove the user from the array
+                    localStorage.setItem('signupData', JSON.stringify(signupData)); // Update localStorage
+                    updateUserList(); // Refresh the user list
+                });
+
+                listItem.appendChild(toggleButton);
+                listItem.appendChild(clearButton);
+                userList.appendChild(listItem);
+            });
+        }
+
+        updateUserList(); // Initial user list rendering
+
+        // Add a click event listener to the logout button
+        logoutButton.addEventListener('click', () => {
+            // Redirect to the login page when the user logs out
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

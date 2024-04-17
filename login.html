@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* Add CSS styles for the Submit button */
+        .button_group a#submit_button {
+            margin-top: -50px; /* Adjust the margin-top as needed */
+        }
+
+        .button_group a#back_button {
+            margin-top: -120px;
+            margin-left: -60px; /* Adjust the margin-top as needed */
+        }
+    </style>
+</head>
+<body>
+    <div class="login_form_container">
+        <div class="login_form">
+            <h2>Login</h2>
+            <div class="input_group">
+                <i class="fa fa-envelope"></i> <!-- Change the icon to represent email -->
+                <input
+                    type="text"
+                    placeholder="Email"
+                    class="input_text"
+                    autocomplete="off"
+                />
+            </div>
+            <div class="input_group">
+                <i class="fa fa-unlock-alt"></i>
+                <input
+                    type="password"
+                    placeholder="Password"
+                    class="input_text"
+                    autocomplete="off"
+                />
+            </div>
+            <div class="button_group" id="login_button">
+                <!-- Add an ID to the Submit button -->
+                <a id="submit_button">Submit</a>
+            </div>
+            <div class="fotter">
+                <a>Forgot Password?</a>
+                <a href="signup.html">Sign Up</a>
+                <!-- Use the same HTML structure and styles as the "Submit" button -->
+                <div class="button_group" id="login_button">
+                    <a id="back_button" href="index.html">Back to College</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#submit_button').click(function(e) {
+                e.preventDefault();
+                const email = $('.input_text:eq(0)').val(); // Get the value of the email input
+                const password = $('.input_text:eq(1)').val();
+                const storedData = localStorage.getItem('signupData');
+                const signupData = storedData ? JSON.parse(storedData) : [];
+
+                // Check if the email and password match a registered user
+                const user = signupData.find(user => user.email === email && user.password === password);
+
+                if (user) {
+                    // Check the user's status and redirect accordingly
+                    if (user.status === 'Enabled') {
+                        window.location.href = 'display_data.html'; // Redirect to display_data.html for enabled users
+                    } else if (user.status === 'Disabled') {
+                        window.location.href = 'DCMEcard.html'; // Redirect to newpage.html for disabled users
+                    }
+                } else {
+                    alert('Invalid email or password. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
